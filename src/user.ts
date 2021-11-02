@@ -1,5 +1,6 @@
 
 import { renderBlock } from './lib.js'
+import { Place } from "./search-form";
 
 class User {
   username: string = 'Wade Warren'
@@ -7,8 +8,8 @@ class User {
 }
 
 export function renderUserBlock(username: string, avatarUrl: string, favoriteItemsAmount = 0) {
-  const favoritesCaption = favoriteItemsAmount > 1 ? favoriteItemsAmount : 'ничего нет'
-  const hasFavoriteItems = favoriteItemsAmount > 1
+  const favoritesCaption = favoriteItemsAmount >= 1 ? favoriteItemsAmount : 'ничего нет'
+  const hasFavoriteItems = favoriteItemsAmount >= 1
 
   renderBlock(
     'user-block',
@@ -37,11 +38,14 @@ export function getUserData(): User {
 }
 
 export function getFavoritesAmount(): number | null {
-  const data = +JSON.parse(localStorage.getItem('favoritesAmount'))
+  const favoritesList: Array<Partial<Place>> | undefined = JSON.parse(localStorage.getItem('favoriteItems'))
+  console.log(favoritesList)
 
-  if (isNaN(data)) {
-    return null
+  if (favoritesList && favoritesList.length > 0) {
+    return favoritesList.length
   } else {
-    return data
+    return null
   }
+
 }
+
